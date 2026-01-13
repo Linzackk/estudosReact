@@ -1,10 +1,21 @@
 import { useContext, useState } from "react";
 import { UserContext } from "../contexts/UserContext";
+import { ReloadUsersButton } from "../components/ReloadUserButton";
+import { SearchInput } from "../components/SearchInput";
+import { OrderToggleButton } from "../components/OrderToggleButton";
+import { UserTitle } from "../components/UserTitle";
+import { ListUsers } from "../components/ListUsers";
 
 export function UsersPage() {
-    const {users, loading, error, reloadUsers} = useContext(UserContext);
+    const {users, loading, error} = useContext(UserContext);
     const [search, setSearch] = useState("");
     const [order, setOrder] = useState<"asc" | "desc">("asc");
+    const filteredUsers = users.filter((user) => user.name.toLowerCase().includes(search.toLowerCase()))
+    const sortedUsers = filteredUsers.sort((a, b) => 
+                    order === "asc"
+                        ? a.name.localeCompare(b.name)
+                        : b.name.localeCompare(a.name)
+                )
 
     function toggleOrder() {
         setOrder((prev) => (prev === "asc" ? "desc": "asc"));
@@ -17,38 +28,15 @@ export function UsersPage() {
     if (error) {
         return <h2>{error}</h2>
     }
+    
 
     return (
         <div>
-            <button onClick={reloadUsers} disabled={loading}>
-                {loading ? "Recarregando..." : "Recarregar Usuários"}
-            </button>
-            <h1>Lista de Usuários</h1>
-            <input 
-                type="text"
-                placeholder="Buscar por nome..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-            />
-            <button onClick={toggleOrder}>
-                Ordenar: {order === "asc" ? "A - Z": "Z - A"}
-            </button>
-
-            <ul>
-                {users.filter((user) =>
-                        user.name.toLowerCase().includes(search.toLowerCase())
-                )
-                .sort((a, b) =>
-                    order === "asc"
-                        ? a.name.localeCompare(b.name)
-                        : b.name.localeCompare(a.name)
-                )
-                .map((user) => (
-                    <li key={user.id}>
-                        {user.name} - {user.email}
-                    </li>
-                ))}
-            </ul>
+            <ReloadUsersButton />
+            <UserTitle />
+            <SearchInput searchValue={search} setSearch={setSearch} />
+            <OrderToggleButton order={order} toggleOrder={toggleOrder}/>
+            <ListUsers users={sortedUsers}/>
         </div>
     );
 }
