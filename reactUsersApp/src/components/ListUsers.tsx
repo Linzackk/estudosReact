@@ -13,7 +13,7 @@ export function ListUsers({users}: ListUsersType)  {
                     {user.name} - {user.email}
                 </li>
             )
-        )};
+        )}
         </ul>
     )
 }
