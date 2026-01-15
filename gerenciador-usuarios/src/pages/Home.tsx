@@ -1,21 +1,26 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useCallback } from "react";
 import UserCard from "../components/UserCard";
+import { useUsers } from "../hooks/useUsers";
 
 const Home: React.FC = () => {
-    const usuarios = [
-        { id: "1", name: "Isaac" },
-        { id: "2", name: "Maria" },
-        { id: "3", name: "João" },
-    ];
+    const favoriteUser = useCallback(() => {
+        console.log("Usuario favoritado")
+    }, []);
+
+    const { users } = useUsers();
 
     return (
         <div>
             <h1>Home - Usuários</h1>
 
             <ul>
-                {usuarios.map((user) => (
-                    <UserCard key={user.id} id={user.id} name={user.name} />
+                {users.map((user) => (
+                    <UserCard 
+                        key={user.id} 
+                        id={user.id} 
+                        name={user.name} 
+                        onFavorite={favoriteUser} 
+                    />
                 ))}
             </ul>
         </div>
