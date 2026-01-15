@@ -6,13 +6,14 @@ interface UserCardProp {
     id: string;
     name: string;
     onFavorite: () => void;
+    isFavorite: boolean;
 }
 
-const UserCard: React.FC<UserCardProp> = ({ id, name, onFavorite }) => {
+const UserCard: React.FC<UserCardProp> = ({ id, name, onFavorite, isFavorite }) => {
     return (
         <li>
             <Link to={`/user/${id}`}>{name}</Link>
-            <ButtonFavorite onFavorite={onFavorite} />
+            <ButtonFavorite onFavorite={onFavorite} isFavorite={isFavorite} />
         </li>
     )
 }

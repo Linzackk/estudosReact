@@ -1,15 +1,11 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useContext } from "react";
 import UserCard from "../components/UserCard";
 import { useUsers, User } from "../hooks/useUsers";
-import { useFavorites } from "../hooks/useFavorites";
+import { FavoritesContext } from "../context/FavoritesContext";
 
 const Home: React.FC = () => {
     const { users } = useUsers();
-    const { addFavorite, favorites, removeFavorite } = useFavorites();
-
-    const favoriteUser = useCallback(() => {
-        console.log("Usuario favoritado")
-    }, []);
+    const { addFavorite, favorites, removeFavorite } = useContext(FavoritesContext);
 
     const toggleFavorite = useCallback(
         (user: User) => {
@@ -31,7 +27,8 @@ const Home: React.FC = () => {
                         key={user.id} 
                         id={user.id} 
                         name={user.name} 
-                        onFavorite={() => toggleFavorite(user)} 
+                        onFavorite={() => toggleFavorite(user)}
+                        isFavorite={favorites.some((u) => u.id === user.id)}
                     />
                 ))}
             </ul>
