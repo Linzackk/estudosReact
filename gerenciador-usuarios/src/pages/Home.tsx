@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from "react";
+import React, { useCallback, useContext, useMemo } from "react";
 import UserCard from "../components/UserCard";
 import { useUsers, User } from "../hooks/useUsers";
 import { FavoritesContext } from "../context/FavoritesContext";
@@ -18,6 +18,10 @@ const Home: React.FC = () => {
         [favorites, addFavorite, removeFavorite]
     );
 
+    const favoritesIds = useMemo(() => {
+        return new Set(favorites.map((u) => u.id));
+    }, [favorites]);
+
     return (
         <div>
             <h1>Home - Usuários</h1>
@@ -28,7 +32,7 @@ const Home: React.FC = () => {
                         id={user.id} 
                         name={user.name} 
                         onFavorite={() => toggleFavorite(user)}
-                        isFavorite={favorites.some((u) => u.id === user.id)}
+                        isFavorite={favoritesIds.has(user.id)}
                     />
                 ))}
             </ul>
